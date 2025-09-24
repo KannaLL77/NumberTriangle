@@ -64,6 +64,29 @@ public class NumberTriangle {
      */
     public void maxSumPath() {
         // for fun [not for credit]:
+        // If it is a leaf, do nothing
+        if(isLeaf()){
+            return;
+        }
+        // Recursive on child (left or right leaf)
+        if(left != null){left.maxSumPath();}
+        if(right != null){right.maxSumPath();}
+
+        // Update the root value
+        if(left != null && right != null){
+            // Add the maximum to the root
+            root += Math.max(left.root, right.root);
+        } else if(left != null){
+            // Only left is not null, add left to root
+            root += left.root;
+        } else if(right != null){
+            // Only right is not null, add right to root
+            root += right.root;
+        }
+
+        // Turn this NumberTriangle into a leaf.
+        left = null;
+        right = null;
     }
 
 
@@ -88,7 +111,18 @@ public class NumberTriangle {
      *
      */
     public int retrieve(String path) {
-        // TODO implement this method
+        // Return the root if the String is empty
+        if(path.isEmpty()){return root;}
+
+        String direction = path.substring(0, 1);
+        String remaining = path.substring(1);
+
+        if(direction.equals("l") && left != null){
+            // Ensure that this path is valid by left != null
+            return left.retrieve(remaining);}
+        else if(direction.equals("r") && right != null){
+            return right.retrieve(remaining);}
+        // If the path is invalid, return -1
         return -1;
     }
 
